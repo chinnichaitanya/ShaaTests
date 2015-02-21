@@ -9,8 +9,8 @@ angular.module('shaastraApp')
         controller: 'CreateCtrl'
       })
       .state('formsView', {
-        url: '/forms/:id/view',
+        url: '/forms/view/:id',
         templateUrl: 'app/forms/view/view.html',
         controller: 'ViewCtrl'
-      });      
+      });
   });

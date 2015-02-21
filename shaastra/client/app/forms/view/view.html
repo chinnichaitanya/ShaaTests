@@ -1,10 +1,13 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<form-directive form="form"></form-directive><hr>
+<form-directive form="form"></form-directive>
+
+<hr>
 
 <div class="text-center">
-	<a class="btn btn-small btn-primary" ng-show="!showJson" ng-click="showJson = true">Show form json object</a>
-	<a class="btn btn-small btn-inverse" ng-show="showJson" ng-click="showJson = false">Hide form json object</a><br><br>
+	<a class="btn btn-primary" ng-show="!showJson" ng-click="showJson = true">Show form json object</a>
+	<a class="btn btn-primary" ng-show="showJson" ng-click="showJson = false">Hide form json object</a>
+	<br><br>
 </div>
 
 <div ng-show="showJson">

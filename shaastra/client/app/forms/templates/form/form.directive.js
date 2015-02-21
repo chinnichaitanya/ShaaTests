@@ -5,12 +5,13 @@ angular.module('shaastraApp')
     return {
         controller: function($scope) {
             $scope.submit = function() {
-                window.alert('Form submitted..');
+                window.alert('Form submitted...');
+                // window.console.log($scope);                
                 $scope.form.submitted = true;
             };
 
             $scope.cancel = function() {
-                window.alert('Form canceled..');
+                window.alert('Form canceled...');
             };
         },
         templateUrl: 'app/forms/templates/form/form.html',

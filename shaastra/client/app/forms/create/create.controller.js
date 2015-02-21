@@ -6,12 +6,14 @@ angular.module('shaastraApp')
     // preview form mode
     $scope.previewMode = false;
 
+    // loading the roles for the form
+    $scope.formRoles = FormService.roles;
+    
     // new form
     $scope.form = {};
     $scope.form.form_id = 1;
     $scope.form.form_name = 'My Form';
-    $scope.form.roles = FormService.roles;
-    $scope.form.form_role = $scope.form.roles[0].name;
+    $scope.form.form_role = $scope.formRoles[0].name;
     $scope.form.form_fields = [];
 
     // previewForm - for preview purposes, form will be copied into this

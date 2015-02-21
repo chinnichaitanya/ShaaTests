@@ -4,13 +4,14 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var FormSchema = new Schema({
-	formId: String,
-	formName: String,
-	role: {
+	form_id: String,
+	form_name: String,
+	form_role: {
 		type: String,
 		default: 'All'
 	},
-	fields: []
+	form_fields: [],
+	form_responses: []
 });
 
 module.exports = mongoose.model('Form', FormSchema);

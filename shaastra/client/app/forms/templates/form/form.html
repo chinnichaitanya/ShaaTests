@@ -1,23 +1,28 @@
-<h2>{{ form.form_name }}</h2>
+<div class="text-center">
+    <h2><u>{{ form.form_name }}</u></h2>
+</div>
 
 <div ng-show="!form.submitted">
-    <div class="field row">
-        <div class="span2">Form ID:</div>
-        <div class="span4">{{ form.form_id }}</div>
+    <div class="row">
+        <div class="text-center">
+            <h4>Form ID: <span class="text-muted">{{ form.form_id }}</span></h4>
+        </div>
     </div>
     <form name="myForm" id="myForm">
-        <div ng-repeat="field in form.form_fields">
-            <field-directive field="field">
+        <div class="row" ng-repeat="field in form.form_fields">
+            <div class="container">
+                <field-directive field="field">
 
-            </field-directive>
+                </field-directive>
+            </div>
         </div>
     </form>
 
-
-    <div class="form-actions">
+    <div>
         <p class="text-center">
-            <button class="btn btn-success right" type="button" ng-disabled="!myForm.$valid" ng-click="submit()"><i class="icon-edit icon-white"></i> Submit Form</button>
-            <button class="btn btn-danger right" type="button" ng-click="cancel()"><i class="icon-remove icon-white"></i> Cancel</button>
+            <button class="btn btn-success" type="button" ng-disabled="!myForm.$valid" ng-click="submit()"><span class="glyphicon glyphicon-edit"></span> Submit Form</button>
+<!--             <button class="btn btn-danger" type="button" ng-click="cancel()"><span class="glyphicon glyphicon-trash"></span> Cancel</button>
+ -->
         </p>
     </div>
 </div>

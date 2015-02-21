@@ -37,14 +37,16 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
 	var newForm = new Form(req.body); 
 	var formDetails = req.body;
-	newForm.formId = formDetails.formValues.form_id;
-	newForm.formName = formDetails.formValues.form_name;
-	newForm.role = formDetails.formValues.form_role.value;
-	newForm.fields = formDetails.formValues.form_fields;
+	newForm.form_id = formDetails.formValues.form_id;
+	newForm.form_name = formDetails.formValues.form_name;
+	if(formDetails.formValues.form_role.value) {
+		newForm.form_role = formDetails.formValues.form_role.value;
+	}
+	newForm.form_fields = formDetails.formValues.form_fields;
 	// console.log(formDetails.formValues.form_fields);
 	newForm.save(function(err, form) {
 		if(err) return validationError(res, err);
-		else console.log('Form saved');
+		else console.log('Form is saved successfully');
 	});
 };
 
