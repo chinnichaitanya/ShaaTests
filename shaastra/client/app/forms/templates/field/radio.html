@@ -1,5 +1,7 @@
+<br>
 <div class="row">
     <div class="col-sm-offset-3 col-sm-2">{{field.field_title}}:</div>
+    <span class="required-error" ng-show="field.field_required && !field.field_value">* required</span>
     <div class="col-sm-3">
         <div ng-repeat="option in field.field_options" class="row-fluid">
             <label>
@@ -7,7 +9,5 @@
                 &nbsp;<span ng-bind="option.option_title"></span>
             </label>
         </div>
-        <span class="required-error" ng-show="field.field_required && !field.field_value">* required</span>
     </div>
 </div>
-<br>

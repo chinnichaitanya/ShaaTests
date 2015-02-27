@@ -16,8 +16,9 @@
         </li>
         <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}"><a href="/admin">Admin</a></li>
         <li ng-show="isAdmin()" ng-class="{active: isActive('/forms/create')}"><a href="/forms/create">Create Form</a></li>
-        <li ng-show="isAdmin()" ng-class="{active: isActive('/forms/1/view')}"><a href="/forms/view/1">View sample form</a></li>
-        <li ng-show="isAdmin()" ng-class="{active: isActive('/forms/create')}"><a ui-sref="formsCreate()">Create using ui-sref</a></li>
+        <li ng-show="isAdmin()" ng-class="{active: isActive('/forms/view/54e8c49f5cd73d3f2154754f')}"><a href="/forms/view/54e8c49f5cd73d3f2154754f">View sample form</a></li>
+        <!-- <li ng-show="isAdmin()" ng-class="{active: isActive('/forms/create')}"><a ui-sref="formsCreate()">Create using ui-sref</a></li> -->
+        <li ng-show="isLoggedIn()" ng-class="{active: isActive('/dashboard')}"><a href="/dashboard">Dashboard</a></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">

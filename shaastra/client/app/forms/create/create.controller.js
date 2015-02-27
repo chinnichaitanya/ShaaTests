@@ -1,19 +1,21 @@
 'use strict';
 
 angular.module('shaastraApp')
-  .controller('CreateCtrl', function ($scope, FormService, $http, socket) {
+  .controller('CreateCtrl', function ($scope, DashService,FormService, $http) {
 
     // preview form mode
     $scope.previewMode = false;
 
     // loading the roles for the form
     $scope.formRoles = FormService.roles;
+    $scope.options = DashService.options;
     
     // new form
     $scope.form = {};
     $scope.form.form_id = 1;
     $scope.form.form_name = 'My Form';
     $scope.form.form_role = $scope.formRoles[0].name;
+    $scope.form.form_category = $scope.options[0].name;
     $scope.form.form_fields = [];
 
     // previewForm - for preview purposes, form will be copied into this
@@ -143,6 +145,8 @@ angular.module('shaastraApp')
     $scope.saveForm = function() {
         if($scope.form.form_fields === null || $scope.form.form_fields.length === 0) {
             window.alert('Please choose some fields to save!');
+        } else if($scope.form.form_role === '' || $scope.form.form_category === '') {
+            window.alert('Please select the "role" and "category"');
         } else {
             angular.copy($scope.form, $scope.createForm);
             // need to do some stuff here

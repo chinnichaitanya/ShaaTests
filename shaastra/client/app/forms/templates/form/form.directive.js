@@ -1,17 +1,30 @@
 'use strict';
 
 angular.module('shaastraApp')
-  .directive('formDirective', function () {
+  .directive('formDirective', function ($http, User, Auth) {
     return {
         controller: function($scope) {
             $scope.submit = function() {
-                window.alert('Form submitted...');
-                // window.console.log($scope);                
-                $scope.form.submitted = true;
-            };
+                $scope.form.form_fields_submitted = []
 
-            $scope.cancel = function() {
-                window.alert('Form canceled...');
+                $scope.form.form_fields_submitted = $scope.form.form_fields;
+                $scope.form.form_id_submitted = $scope.form._id;
+
+                // console.log('id : ' + $scope.form.form_id_submitted);
+                // console.log('values : ' + $scope.form.form_fields_submitted);
+
+                $http.post('/api/forms/submitForm', { 
+                    formValues: $scope.form.form_fields_submitted,  
+                    formId: $scope.form.form_id_submitted
+                });
+                window.alert('Form submitted...');
+                
+                $scope.form.submitted = true;
+
+                // Below command is required else hacker can see all the responses submitted through $scope
+                $scope.form = {};              
+
+                window.location.reload();
             };
         },
         templateUrl: 'app/forms/templates/form/form.html',

@@ -10,6 +10,15 @@ var FormSchema = new Schema({
 		type: String,
 		default: 'All'
 	},
+	created_on: {
+		type: Date,
+		default: Date.now()
+	},
+	updated_on: {
+		type: Date,
+		default: Date.now()
+	},
+	form_category: [],
 	form_fields: [],
 	form_responses: []
 });

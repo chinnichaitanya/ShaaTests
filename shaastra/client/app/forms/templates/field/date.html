@@ -1,8 +1,9 @@
+<br>
 <div class="row">
     <div class="col-sm-offset-3 col-sm-2">{{field.field_title}}:</div>
+    <span class="glyphicon glyphicon-calendar"></span>
     <span class="required-error" ng-show="field.field_required && !field.field_value">* required </span>
    	<div class="col-sm-3">
-       	<input class="form-control" type="text" ng-model="field.field_value" data-date-format="mm/dd/yyyy" bs-datepicker  ng-required="field.field_required" ng-disabled="field.field_disabled">
-        <button type="button" class="btn" data-toggle="datepicker"><i class="glyphicon glyphicon-calendar"></i></button>
+       	<input class="form-control" type="text" placeholder="Click me" ng-model="field.field_value" bs-datepicker ng-required="field.field_required" ng-disabled="field.field_disabled">
 	</div>
 </div>

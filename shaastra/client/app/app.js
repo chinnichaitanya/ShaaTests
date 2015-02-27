@@ -6,8 +6,10 @@ angular.module('shaastraApp', [
   'ngSanitize',
   'btford.socket-io',
   'ui.router',
+  'ui.bootstrap',
   'mgcrea.ngStrap',
   'ui.utils',
+  'permission'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

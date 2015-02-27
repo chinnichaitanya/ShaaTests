@@ -58,33 +58,32 @@ angular.module('shaastraApp')
                 value : 'Cores_Coords'
             }
         ],
-        form: function (id) {
-
-            // return $http.get(formsJsonPath).then(function (response) {
-            //     var requestedForm = {};
-            //     angular.forEach(response.data, function (form) {
-            //         if (form.form_id === id){
-            //             requestedForm = response.data;
-            //             console.log('check : ' + requestedForm);
-            //         }
-            //     });
-            //     return requestedForm;
-            // });
-
-
+        formById: function (id) {
             // $http returns a promise, which has a then function, which also returns a promise
-            // return $http.get(formsJsonPath).then(function (response) {
             return $http.get('/api/forms/' + id).then(function (response) {
                 // console.log(response.data._id);    
                 var requestedForm = {};
-                // angular.forEach(response.data, function (form) {
-                    // if (form.form_id === id){
-                        requestedForm = response.data;
-                        // console.log(requestedForm);
-                    // }
-                // });
+                requestedForm = response.data;
                 return requestedForm;
             });
+        },
+        formByCategory: function (category) {
+            // $http returns a promise, which has a then function, which also returns a promise
+            return $http.get('/api/forms/dashFormFields/' + category).then(function (response) {
+                // console.log(response.data._id);    
+                var requestedForm = {};
+                requestedForm = response.data;
+                return requestedForm;
+            });
+        },
+        formValues: function(category) {
+            // $http returns a promise, which has a then function, which also returns a promise
+            return $http.get('/api/forms/dashFormValues/' + category).then(function (response) {
+                // console.log(response.data._id);    
+                var requestedValues = {};
+                requestedValues = response.data;
+                return requestedValues;
+            });            
         },
         forms: function() {
             return $http.get(formsJsonPath).then(function (response) {

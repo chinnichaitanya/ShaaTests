@@ -1,0 +1,76 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<header class="hero-unit" id="banner">
+  <div class="container">
+  	<h1><u>Welcome</u></h1>
+    <!-- <img src="assets/images/yeoman.png" alt="I'm Yeoman"> -->
+  </div>
+</header>
+
+<div class="container-fluid">
+    <div class="row" ng-hide="updated">
+        <div class="col-sm-12 text-center">
+            <h4><u>Choose your preference and click 'save' button</u></h4> <br>
+        </div>
+    </div>    
+    <div class="row" ng-show="updated">
+        <div class="col-sm-12 text-center">
+            <h4>You have applied for "{{applying.name}}"</h4> 
+            <br>
+        </div>
+    </div>    
+    <div class="row" ng-hide="updated">
+        <div class="col-sm-offset-4 col-sm-3">
+            <select class="form-control" ng-model="applying" ng-options="type.name for type in options track by type.value"></select>
+        </div>    
+        <div class="col-sm-3">
+        	<button type="button" class="btn btn-success" ng-click="updateUser()">Save</button>	
+        </div>
+    </div>    
+
+  <hr>
+
+  <tabset justified="true">
+    <tab heading="Fill Application">
+    	<br>
+    	<div class="container-fluid" ng-hide="form._id || updated">
+    		<alert type="danger" class="text-center">
+    			<h4>Choose your preference first</h4>
+    		</alert>
+    	</div>
+
+    	<div class="container-fluid" ng-show="updated">
+    		<!-- if there is no form fetched for that particular department -->
+    		<div ng-hide="formPresent">
+    			<alert class="text-center">
+    				<h4>Seems that your application is still not ready !</h4>
+    				<h4>Please come back later</h4>
+    			</alert>
+			</div>
+
+    		<!-- showing form only if there is a form for the particular department -->
+    		<div ng-show="formPresent">
+    			<alert type="info" class="text-center">
+    				<h4>Fill/Update your Application</h4>
+    			</alert>
+    		
+    			<!-- displaying the form -->
+				<form-directive form="form"></form-directive>
+			</div>
+    	</div>
+    	{{formResponses | json}}
+    </tab>
+    <tab heading="SJ">Short Labeled Justified content</tab>
+    <tab heading="Long Justified">Long Labeled Justified content</tab>
+  </tabset>
+</div>
+
+<footer class="footer">
+  <div class="container">
+      <p>
+      	<a href="http://www.shaastra.org">Shaastra 2015</a> |
+        <a href="https://twitter.com/ShaastraIITM">Twitter</a> |
+        <a href="https://www.facebook.com/Shaastra?ref=br_tf">Facebook</a>
+    </p>
+  </div>
+</footer>

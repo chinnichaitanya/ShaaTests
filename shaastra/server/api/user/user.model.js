@@ -18,7 +18,16 @@ var UserSchema = new Schema({
   facebook: {},
   twitter: {},
   google: {},
-  github: {}
+  github: {},
+  created_on: {
+    type: Date,
+    default: Date.now()
+  },
+  updated_on: {
+    type: Date,
+    default: Date.now()
+  },
+  applied_for: []  
 });
 
 /**
