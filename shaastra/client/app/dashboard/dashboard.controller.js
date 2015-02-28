@@ -41,8 +41,8 @@ angular.module('shaastraApp')
     if($scope.updated) {
       FormService.formValues($scope.applying.value).then(function(responses) {
 
-        console.log('responses below :');
-        console.log(responses);
+        // console.log('responses below :');
+        // console.log(responses);
         $scope.formResponses = responses;
       });
     } else {

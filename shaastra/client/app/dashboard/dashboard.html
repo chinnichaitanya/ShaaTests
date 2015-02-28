@@ -58,7 +58,36 @@
 				<form-directive form="form"></form-directive>
 			</div>
     	</div>
-    	{{formResponses | json}}
+    	<hr>
+
+    	<div class="row text-center">
+    		<h1><u>Your latest response</u></h1>
+    	</div>
+    	<br>
+    	<!-- <pre>{{formResponses | json}}</pre> -->
+    	<div ng-hide="formResponses" class="row text-center">
+    		<alert type="danger">You haven't submitted your response yet</alert>
+    	</div>
+    	<div ng-show="formResponses" ng-repeat="each in formResponses">
+    		<div class="row">
+    			<div class="col-sm-offset-4 col-sm-2">
+	    			<h4>{{each.field_title}} :</h4>
+    			</div>
+    			<div class="col-sm-2" ng-if="each.field_type === 'dropdown'">
+    				<div ng-repeat="option in each.field_options">
+    					<input class="form-control" type="text" ng-if="each.field_value == option.option_id" ng-model="option.option_title" disabled>
+    				</div>
+    			</div>
+    			<div class="col-sm-2" ng-if="each.field_type === 'radio'">
+    				<div ng-repeat="option in each.field_options">
+    					<input class="form-control" type="text" ng-if="each.field_value == option.option_id" ng-model="option.option_title" disabled>
+    				</div>
+    			</div>
+    			<div class="col-sm-2" ng-if="each.field_type != 'dropdown' && each.field_type != 'radio'">
+    				<input class="form-control" type="text" ng-model="each.field_value" disabled>
+    			</div>
+    		</div>
+    	</div>
     </tab>
     <tab heading="SJ">Short Labeled Justified content</tab>
     <tab heading="Long Justified">Long Labeled Justified content</tab>
@@ -66,11 +95,11 @@
 </div>
 
 <footer class="footer">
-  <div class="container">
-      <p>
-      	<a href="http://www.shaastra.org">Shaastra 2015</a> |
-        <a href="https://twitter.com/ShaastraIITM">Twitter</a> |
-        <a href="https://www.facebook.com/Shaastra?ref=br_tf">Facebook</a>
-    </p>
-  </div>
+  	<div class="container">
+    	<p>
+	      	<a href="http://www.shaastra.org">Shaastra 2015</a> |
+	        <a href="https://twitter.com/ShaastraIITM">Twitter</a> |
+	        <a href="https://www.facebook.com/Shaastra?ref=br_tf">Facebook</a>
+	    </p>
+	</div>
 </footer>

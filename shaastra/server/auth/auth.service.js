@@ -30,6 +30,8 @@ function isAuthenticated() {
         if (!user) { conosle.log('no user'); return res.send(401); }
 
         req.user = user;
+
+        // console.log('from auth.service : ' + req.user);
         next();
       });
     });

@@ -1,6 +1,6 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<div class="container">
+<!-- <div class="container">
   <p>The delete user and user index api routes are restricted to users with the 'admin' role.</p>
   <ul class="list-group">
     <li class="list-group-item" ng-repeat="user in users">
@@ -9,4 +9,40 @@
         <a ng-click="delete(user)" class="trash"><span class="glyphicon glyphicon-trash pull-right"></span></a>
     </li>
   </ul>
+</div> -->
+
+<div class="container-fluid">
+	<!-- <pre>{{formResponses | json}}</pre> -->
+	<tabset>
+		<tab ng-repeat="option in options" select="changeTo(option.value)" heading="{{option.name}}">
+
+			<div class="jumbotron" ng-repeat="response in formResponses">
+				
+		    	<div ng-hide="response" class="row text-center">
+		    		<alert type="danger">There are no responses yet</alert>
+		    	</div>
+		    	<div ng-repeat="each in response">
+		    		<div class="row">
+		    			<div class="col-sm-offset-4 col-sm-2">
+			    			<h4>{{each.field_title}} :</h4>
+		    			</div>
+		    			<div class="col-sm-2" ng-if="each.field_type === 'dropdown'">
+		    				<div ng-repeat="option in each.field_options">
+		    					<input class="form-control" type="text" ng-if="each.field_value == option.option_id" ng-model="option.option_title" disabled>
+		    				</div>
+		    			</div>
+		    			<div class="col-sm-2" ng-if="each.field_type === 'radio'">
+		    				<div ng-repeat="option in each.field_options">
+		    					<input class="form-control" type="text" ng-if="each.field_value == option.option_id" ng-model="option.option_title" disabled>
+		    				</div>
+		    			</div>
+		    			<div class="col-sm-2" ng-if="each.field_type != 'dropdown' && each.field_type != 'radio'">
+		    				<input class="form-control" type="text" ng-model="each.field_value" disabled>
+		    			</div>
+		    		</div>
+		    	</div>
+
+			</div>
+		</tab>
+	</tabset>	
 </div>

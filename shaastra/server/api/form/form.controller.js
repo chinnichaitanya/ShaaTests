@@ -37,7 +37,6 @@ exports.showById = function(req, res) {
 exports.showByCategory = function(req, res) {
 	// refer http://docs.mongodb.org/manual/tutorial/query-documents/#match-an-array-element
 	// refer http://stackoverflow.com/questions/18148166/find-document-with-array-that-contains-a-specific-value
-
 	Form.find( {'form_category.0.value' : req.params.category}, function (err, form) {
 		// console.log('params : ' + req.params.category);
 		if(err) { return handleError(res, err); }
@@ -49,36 +48,53 @@ exports.showByCategory = function(req, res) {
 // Get filled form values of the user
 exports.showValues = function(req, res) {
 	var actualForm = new Object();
+	var i = 0;
+
 	Form.find( {'form_category.0.value' : req.params.category}, function (err, form) {
+
 		if(err) { return handleError(res, err); }
 		if(!form[0]) { 
 			console.log('no form has been found!'); return res.send(404); 
 		} else {
-			// console.log(form);
 			actualForm = form[0];
 			var len = actualForm.form_responses.length;
 
-//////////////////////// WHERE IS THE ERROR IN THIS ??? ////////////////////////////
-
-			console.log(actualForm.form_responses[2][0].userId);
-			console.log(req.user._id);
-			
-			for(var i=0; i<len; i++) {
+			// console.log(actualForm.form_responses[1]);
+			// console.log('length : ' + len);
+			// 
+			for(i=0; i<len; i++) {
 				// refer http://stackoverflow.com/questions/11637353/comparing-mongoose-id-and-strings
 
-				// if(actualForm.form_responses[i][0].userId.toString() === req.user._id.toString()) {
 				if(actualForm.form_responses[i][0].userId.equals(req.user._id)) {
-					console.log('compared');
-					console.log(actualForm.form_responses[i][0]);
-					return res.json(actualForm.form_responses[i][0]);
-				} else {
-					return res.json();
+					// if(actualForm.form_responses[i][0].userEmail === req.user.email) {
+					// console.log('compared');
+					// console.log(actualForm.form_responses[i]);
+					
+					return res.json(actualForm.form_responses[i]);
 				}
 			}						
 		}
 
 	});
 };
+
+// gets all the responses for a given category for admin
+exports.showValuesAll = function(req, res) {
+	var actualForm = new Object();
+
+	Form.find( {'form_category.0.value' : req.params.category}, function (err, form) {
+
+		if(err) { return handleError(res, err); }
+		if(!form[0]) { 
+			console.log('no form has been found!'); return res.send(404); 
+		} else {
+			console.log(form[0].form_responses);
+			actualForm = form[0];
+			return res.json(actualForm.form_responses);
+		}
+	});
+};
+
 
 // Create a new form in the db
 exports.create = function(req, res) {

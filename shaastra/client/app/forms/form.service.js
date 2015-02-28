@@ -79,7 +79,16 @@ angular.module('shaastraApp')
         formValues: function(category) {
             // $http returns a promise, which has a then function, which also returns a promise
             return $http.get('/api/forms/dashFormValues/' + category).then(function (response) {
-                // console.log(response.data._id);    
+                // console.log(response.data);    
+                var requestedValues = {};
+                requestedValues = response.data;
+                return requestedValues;
+            });            
+        },
+        formValuesAll: function(category) {
+            // $http returns a promise, which has a then function, which also returns a promise
+            return $http.get('/api/forms/adminFormValues/' + category).then(function (response) {
+                // console.log(response.data);    
                 var requestedValues = {};
                 requestedValues = response.data;
                 return requestedValues;
