@@ -60,8 +60,8 @@ angular.module('shaastraApp')
         ],
         formById: function (id) {
             // $http returns a promise, which has a then function, which also returns a promise
+            // if id === 0, this service returns list of all the forms
             return $http.get('/api/forms/' + id).then(function (response) {
-                // console.log(response.data._id);    
                 var requestedForm = {};
                 requestedForm = response.data;
                 return requestedForm;

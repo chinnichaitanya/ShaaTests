@@ -93,22 +93,27 @@ exports.me = function(req, res, next) {
   });
 };
 
+// to store the user preferences for which department he/she wanted to apply
 exports.update = function(req, res) {
   var userId = req.body.id;
   User.findById(userId, function(err, user) {
     if(err) { return handleError(res, err); }
     if(!user) {
       console.log('user not found');
-      return res.send('Couldnt find you in database!');
+      return res.send({ type: 'danger', msg: 'Couldnt find you in database!'});
     } else {
       if(user.applied_for[0] || req.body.applying === 'none') {
         console.log('cannot update');
-        return res.send('Cannot update!');
+        return res.send({ type: 'danger', msg: 'Cannot update!'});
       } else {
         user.applied_for.push(req.body.applying);
         user.save(function(err, updatedUser) {
-          if(err) return validationError(res, err);
-          else console.log('User updated successfully!');
+          // if(err) return validationError(res, err);
+          if(err) return res.status(500).send({ type: 'danger', msg: 'Something happened while saving. Try later!' });
+          else {
+            console.log('User updated successfully!');
+            return res.send({ type: 'success', msg: 'Successfully noted!'});
+          }
         });
       }     
     }

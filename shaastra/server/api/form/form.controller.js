@@ -26,11 +26,19 @@ exports.index = function(req, res) {
 
 // Get a single form by id
 exports.showById = function(req, res) {
-	Form.findById(req.params.id, function (err, form) {
-		if(err) { return handleError(res, err); }
-		if(!form) { return res.send(404); }
-		return res.json(form);
-	});
+	if(req.params.id === '0') {
+		Form.find({}, function(err, allForms) {
+			if(err) return handleError(res, err);
+			// NEED TO OPTIMIZE THIS SHIT
+			return res.json(200, allForms);
+		});
+	} else {
+		Form.findById(req.params.id, function (err, form) {
+			if(err) { return handleError(res, err); }
+			if(!form) { return res.send(404); }
+			return res.json(form);
+		});
+	}
 };
 
 // Get a form by category
@@ -40,7 +48,7 @@ exports.showByCategory = function(req, res) {
 	Form.find( {'form_category.0.value' : req.params.category}, function (err, form) {
 		// console.log('params : ' + req.params.category);
 		if(err) { return handleError(res, err); }
-		if(!form[0]) { console.log('no form has been found!'); return res.send(404); }
+		if(!form[0]) return res.send(404); 
 		return res.json(form[0]);
 	});
 };
@@ -54,7 +62,7 @@ exports.showValues = function(req, res) {
 
 		if(err) { return handleError(res, err); }
 		if(!form[0]) { 
-			console.log('no form has been found!'); return res.send(404); 
+			return res.send(404); 
 		} else {
 			actualForm = form[0];
 			var len = actualForm.form_responses.length;
@@ -86,9 +94,9 @@ exports.showValuesAll = function(req, res) {
 
 		if(err) { return handleError(res, err); }
 		if(!form[0]) { 
-			console.log('no form has been found!'); return res.send(404); 
+			return res.send(404); 
 		} else {
-			console.log(form[0].form_responses);
+			// console.log(form[0].form_responses);
 			actualForm = form[0];
 			return res.json(actualForm.form_responses);
 		}
@@ -112,7 +120,7 @@ exports.create = function(req, res) {
 	// console.log(formDetails.formValues.form_fields);
 	newForm.save(function(err, form) {
 		if(err) return validationError(res, err);
-		else console.log('Form is saved successfully');
+		else res.send({type: 'success', msg: 'Created successfully'});
 	});
 };
 
@@ -120,8 +128,8 @@ exports.submitForm = function(req, res) {
 	Form.findById(req.body.formId, function(err, form) {
 		if(err) { return handleError(res, err); }
 		if(!form) { 
-			console.log('No form found!');
-			return res.send('Error occurred!! Could not submit your response'); 
+			// console.log('No form found!');
+			return res.send(404); 
 		} else {
 			var len = form.form_responses.length;
 			var old_user = false;
@@ -186,7 +194,7 @@ exports.submitForm = function(req, res) {
 				req.body.formValues[0].responseCreatedOn = Date.now();
 				req.body.formValues[0].responseUpdatedOn = Date.now();
 				
-				// console.log(req.body.formValues);
+				console.log(req.body.formValues);
 
 				form.form_responses.push(req.body.formValues);
 				form.updated_on = Date.now();
@@ -195,7 +203,7 @@ exports.submitForm = function(req, res) {
 
 				form.save(function(err, updatedForm) {
 					if(err) return validationError(res, err);
-					else console.log('Response noted successfully LOL');
+					else res.send({type: 'success', msg: 'Updated successfully'});
 				});
 			}
 		}
@@ -204,7 +212,11 @@ exports.submitForm = function(req, res) {
 
 // Deletes a form from the db
 exports.destroy = function(req, res) {
-
+	Form.findByIdAndRemove(req.body.del_id, function (err, form) {
+		if(err) { return handleError(res, err); }
+		if(!form) { return res.send(404); }
+		return res.send({type: 'success', msg: 'Successfully removed'});
+	});
 };
 
 function handleError(res, err) {

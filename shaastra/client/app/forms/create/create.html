@@ -9,6 +9,12 @@
             </blockquote>
         </div>
     </div>    
+
+    <!-- for alerting gen messages -->
+    <alert ng-click="closeAlert()" ng-show="message.type && message.msg" type="{{message.type}}">
+        {{message.msg}}
+    </alert>
+    <br>
     
     <div class="row" style="text-align: center;">
         <div ng-hide="previewMode">

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('shaastraApp')
-  .controller('AdminCtrl', function ($scope, $http, Auth, User, FormService, DashService) {
+  .controller('AdminCtrl', function ($scope, $http, Auth, User, FormService, DashService, socket) {
 
     // // Use the User $resource to fetch all users
     // $scope.users = User.query();
@@ -15,28 +15,61 @@ angular.module('shaastraApp')
     //   });
     // };
 
+    // getting all the forms
+    $scope.allForms = '';
+    $scope.applying = '';
+    $scope.message = '';
+
+    FormService.formById(0).then(function(responses) {
+      if(responses.length != 0) {
+        $scope.allForms = responses;
+        socket.syncUpdates('form', $scope.allForms);
+      } else {
+        $scope.allForms = '';
+      }
+    });
+
+
     // getting all the categories
     $scope.options = DashService.options;
-    $scope.applying = '';
 
+    // changes the $scope.applying value and thereby search all the responses w.r.t category
     $scope.changeTo = function(value) {
       $scope.applying = value;
+      $scope.formResponses = '';
 
 // NEED TO OPTIMIZE THIS THING
+
+// getting all the responses of a particular category
       FormService.formValuesAll($scope.applying).then(function(responses) {
         // using responses.length because responses has one element if there are no responses for that form
         if(responses.length != 0) {
-          // console.log('sssss');
-          // console.log('responses below :');
-          // console.log(responses);
           $scope.formResponses = responses;
         } else {
-          // console.log('sdasdas');
-          $scope.formResponses = [];
+          $scope.formResponses = '';
         }
       });
     };
 
+    // destroy a particular form
+    $scope.destroy = function(id) {
+      $http.post('/api/forms/delete', { del_id: id })
+        .success(function(message) {
+          $scope.message = message;
+        })
+        .error(function(message) {
+          $scope.message = '';
+        });
+    }
 
+    // removing all the messages in scope 
+    $scope.closeAlert = function() {
+      $scope.message = {};
+    }
+
+    $scope.$on('$destroy', function () {
+      console.log('tee');
+      socket.unsyncUpdates('form');
+    });    
 
   });

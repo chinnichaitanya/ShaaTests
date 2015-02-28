@@ -5,6 +5,7 @@ angular.module('shaastraApp')
 
     $scope.updated = false;
     $scope.form = {};
+    $scope.message = {};
     
     // checking if already applied or not
     if(Auth.getCurrentUser()._id) {
@@ -40,13 +41,10 @@ angular.module('shaastraApp')
     // loading the submitted values
     if($scope.updated) {
       FormService.formValues($scope.applying.value).then(function(responses) {
-
-        // console.log('responses below :');
-        // console.log(responses);
         $scope.formResponses = responses;
       });
     } else {
-      $scope.formResponses = 'nothing';
+      $scope.formResponses = '';
     }
       
     // for date-picker
@@ -59,11 +57,23 @@ angular.module('shaastraApp')
 
     $scope.updateUser = function() {
       if($scope.applying && Auth.getCurrentUser()._id) {
-        $http.post('/api/users/update', { id: Auth.getCurrentUser()._id, applying: $scope.applying });
+        $http.post('/api/users/update', { id: Auth.getCurrentUser()._id, applying: $scope.applying })
+          .success(function(message) {
+            // console.log(message);
+            $scope.message = message;
+          })
+          .error(function(message) {
+            $scope.message = message;
+          });
+
         $scope.updated = true;
-        window.location.reload();
+        // window.location.reload();
       } else {
         window.alert('Please select your preference!')
       }
+    };
+
+    $scope.emptyAlerts = function() {
+      $scope.message = {};
     };
   });

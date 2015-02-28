@@ -6,7 +6,7 @@ angular.module('shaastraApp')
         var getTemplateUrl = function(field) {
             var type = field.field_type;
             var templateUrl = '';
-
+// ADD A DEFAULT TEMPLATE HERE IF type DOESN'T MATCH
             switch(type) {
                 case 'textfield':
                     templateUrl = 'app/forms/templates/field/textfield.html';

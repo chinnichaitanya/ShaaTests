@@ -3,6 +3,9 @@
 angular.module('shaastraApp')
   .controller('CreateCtrl', function ($scope, DashService,FormService, $http) {
 
+    // messages for alerting purpose
+    $scope.message = '';
+
     // preview form mode
     $scope.previewMode = false;
 
@@ -150,9 +153,22 @@ angular.module('shaastraApp')
         } else {
             angular.copy($scope.form, $scope.createForm);
             // need to do some stuff here
-            $http.post('/api/forms', { formValues: $scope.form });
+            $http.post('/api/forms', { formValues: $scope.form })
+                .success(function(message) {
+                    $scope.message = message;
+                })
+                .error(function(message) {
+                    $scope.message = '';
+                });
+                
             $scope.form = {};            
             console.log('Saved form');
         }
     };
+
+    // deletes the alert
+    $scope.closeAlert = function() {
+        $scope.message = '';
+    };
+
 });
