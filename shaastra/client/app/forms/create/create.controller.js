@@ -32,10 +32,6 @@ angular.module('shaastraApp')
     $scope.addField.new = $scope.addField.types[0].name;
     $scope.addField.lastAddedID = 0;
 
-    // accordion settings
-    $scope.accordion = {};
-    $scope.accordion.oneAtATime = true;
-
     // create new field button click
     $scope.addNewField = function(){
 

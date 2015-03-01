@@ -67,7 +67,7 @@ angular.module('shaastraApp')
           });
 
         $scope.updated = true;
-        // window.location.reload();
+        window.location.reload();
       } else {
         window.alert('Please select your preference!')
       }

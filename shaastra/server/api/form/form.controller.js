@@ -156,10 +156,10 @@ exports.submitForm = function(req, res) {
 					req.body.formValues[0].responseCreatedOn = Date.now();
 					req.body.formValues[0].responseUpdatedOn = Date.now();
 					
-					form.form_responses[i][0] = req.body.formValues[0];
+					form.form_responses[i] = req.body.formValues;
 
-					console.log(req.body.formValues[0]);
-					console.log(form.form_responses[i][0]);
+					console.log(req.body.formValues);
+					console.log(form.form_responses[i]);
 
 					// updating the original response created date
 					form.form_responses[i][0].responseCreatedOn = createdDate;
@@ -167,17 +167,38 @@ exports.submitForm = function(req, res) {
 					// updating the form updated date
 					form.updated_on = Date.now();
 
-					form.update(
-						{ 'form._id': req.body.formId },
-						{
-							$set: {
-								'form_responses.$.0': req.body.formValues[0]
-							}
-						}, function(err) {
+					// form.update(
+					// 	{ 	
+					// 		'form_responses.i.0.userId': req.user._id,
+					// 		'form_id': req.body.formId
+					// 	},
+					// 	{
+					// 		$set: {
+					// 			'form_responses.i': req.body.formValues
+					// 		}
+					// 	}, function(err) {
+					// 		console.log('error occurred');
+					// 		console.log(err);
+					// 	}
+					// )
+
+
+
+					form.form_responses.push([form.form_responses[i], req.body.formValues]);
+						form.markModified('form_responses');
+					form.save(function(err, up) {
+						if(err) {
 							console.log('error occurred');
 							console.log(err);
+						} else {
+							console.log('udated form');
+							console.log(up);
 						}
-					)
+					});	
+
+
+
+
 
 					old_user = true;
 				}

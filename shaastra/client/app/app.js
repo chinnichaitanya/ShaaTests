@@ -7,7 +7,6 @@ angular.module('shaastraApp', [
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap',
-  'mgcrea.ngStrap',
   'ui.utils',
   'permission'
 ])
