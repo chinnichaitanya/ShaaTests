@@ -10,9 +10,6 @@ angular.module('shaastraApp')
                 $scope.form.form_fields_submitted = $scope.form.form_fields;
                 $scope.form.form_id_submitted = $scope.form._id;
 
-                // console.log('id : ' + $scope.form.form_id_submitted);
-                // console.log('values : ' + $scope.form.form_fields_submitted);
-
                 $http.post('/api/forms/submitForm', { 
                     formValues: $scope.form.form_fields_submitted,  
                     formId: $scope.form.form_id_submitted

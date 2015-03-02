@@ -23,7 +23,7 @@ angular.module('shaastraApp')
     FormService.formById(0).then(function(responses) {
       if(responses.length != 0) {
         $scope.allForms = responses;
-        socket.syncUpdates('form', $scope.allForms);
+        // socket.syncUpdates('form', $scope.allForms);
       } else {
         $scope.allForms = '';
       }
@@ -38,7 +38,7 @@ angular.module('shaastraApp')
       $scope.applying = value;
       $scope.formResponses = '';
 
-// NEED TO OPTIMIZE THIS THING
+// NEED TO OPTIMIZE THIS THING BUT HOW ???
 
 // getting all the responses of a particular category
       FormService.formValuesAll($scope.applying).then(function(responses) {
@@ -56,6 +56,7 @@ angular.module('shaastraApp')
       $http.post('/api/forms/delete', { del_id: id })
         .success(function(message) {
           $scope.message = message;
+          window.location.reload();
         })
         .error(function(message) {
           $scope.message = '';
@@ -67,9 +68,9 @@ angular.module('shaastraApp')
       $scope.message = {};
     }
 
-    $scope.$on('$destroy', function () {
-      console.log('tee');
-      socket.unsyncUpdates('form');
-    });    
+    // $scope.$on('$destroy', function () {
+    //   console.log('tee');
+    //   socket.unsyncUpdates('form');
+    // });    
 
   });

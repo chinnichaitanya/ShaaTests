@@ -117,43 +117,53 @@ exports.submitForm = function(req, res) {
 		if(!form) { 
 			return res.send(404); 
 		} else {
-			var len = form.form_responses.length;
-			var old_user = false;
-			for(var i=0; i<len; i++) {
-				if(form.form_responses[i].userId.equals(req.user._id)) {					 
-					form.form_responses[i].values = req.body.formValues;
-					form.form_responses[i].responseUpdatedOn = Date.now();
+			// var validated = false;
 
-					form.updated_on = Date.now();
+			// validated = validateForm(form, req.body.formValues);
+			// console.log(validated);
 
-					form.markModified('updated_on');
-					form.markModified('form_responses');
+			// if(validated) {
+			if(true) {
+				var len = form.form_responses.length;
+				var old_user = false;
+				for(var i=0; i<len; i++) {
+					if(form.form_responses[i].userId.equals(req.user._id)) {					 
+						form.form_responses[i].values = req.body.formValues;
+						form.form_responses[i].responseUpdatedOn = Date.now();
+
+						form.updated_on = Date.now();
+
+						form.markModified('updated_on');
+						form.markModified('form_responses');
+
+						form.save(function(err) {
+							if(err) console.log(err);
+						});
+				
+						old_user = true;
+					}
+				}
+				
+				if(old_user === true) {
+					return res.send('Updated successfully');
+				} else {
+					var fVal = {}
+					fVal['values'] = req.body.formValues;
+					fVal['userId'] = req.user._id;
+					fVal['userName'] = req.user.name;
+					fVal['userEmail'] = req.user.email;
+					fVal['responseCreatedOn'] = Date.now();
+					fVal['responseUpdatedOn'] = Date.now();
+
+					form.form_responses.push(fVal);
 
 					form.save(function(err) {
-						if(err) console.log(err);
+						if(err) return validationError(res, err);
+						else res.send({type: 'success', msg: 'Updated successfully'});
 					});
-			
-					old_user = true;
 				}
-			}
-			
-			if(old_user === true) {
-				return res.send('Updated successfully');
 			} else {
-				var fVal = {}
-				fVal['values'] = req.body.formValues;
-				fVal['userId'] = req.user._id;
-				fVal['userName'] = req.user.name;
-				fVal['userEmail'] = req.user.email;
-				fVal['responseCreatedOn'] = Date.now();
-				fVal['responseUpdatedOn'] = Date.now();
-
-				form.form_responses.push(fVal);
-
-				form.save(function(err) {
-					if(err) return validationError(res, err);
-					else res.send({type: 'success', msg: 'Updated successfully'});
-				});
+				res.send({type: 'danger', msg: 'Please fill all the required details!'});
 			}
 		}
 	});
@@ -171,3 +181,34 @@ exports.destroy = function(req, res) {
 function handleError(res, err) {
 	return res.send(500, err);
 }
+
+/**
+function validateForm(form, formValues) {
+	var len1 = form.form_fields.length;
+	var len2 = formValues.length;
+	var validated = false;
+	var j = 0;
+	var i = 1;
+	if(len1 != len2) {
+		res.send({type: 'danger', msg: 'Bloody Hell'});
+	} else {
+		while(j<len1) {
+			if(form.form_fields[j].field_required) {
+				if(formValues[j].field_required) {
+					i *= 1;
+				} else {
+					i *= 0;
+				}
+			}
+		}
+
+		if(i === 1) {
+			validated = true;
+		} else {
+			validated = false;
+		}
+	}
+	console.log(i);
+	return validated;
+}
+*/
