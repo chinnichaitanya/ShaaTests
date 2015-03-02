@@ -24,7 +24,7 @@ exports.index = function(req, res) {
 	});
 };	
 
-// Get a single form by id
+// Get a single form or all forms by id
 exports.showById = function(req, res) {
 	if(req.params.id === '0') {
 		Form.find({}, function(err, allForms) {
@@ -55,43 +55,30 @@ exports.showByCategory = function(req, res) {
 
 // Get filled form values of the user
 exports.showValues = function(req, res) {
-	var actualForm = new Object();
+	var actualForm = {};
 	var i = 0;
-
 	Form.find( {'form_category.0.value' : req.params.category}, function (err, form) {
-
 		if(err) { return handleError(res, err); }
 		if(!form[0]) { 
 			return res.send(404); 
 		} else {
 			actualForm = form[0];
 			var len = actualForm.form_responses.length;
-
-			// console.log(actualForm.form_responses[1]);
-			// console.log('length : ' + len);
-			// 
 			for(i=0; i<len; i++) {
 				// refer http://stackoverflow.com/questions/11637353/comparing-mongoose-id-and-strings
-
-				if(actualForm.form_responses[i][0].userId.equals(req.user._id)) {
-					// if(actualForm.form_responses[i][0].userEmail === req.user.email) {
-					// console.log('compared');
-					// console.log(actualForm.form_responses[i]);
-					
+				// debugger;
+				if(actualForm.form_responses[i].userId.equals(req.user._id)) {
 					return res.json(actualForm.form_responses[i]);
 				}
 			}						
 		}
-
 	});
 };
 
 // gets all the responses for a given category for admin
 exports.showValuesAll = function(req, res) {
-	var actualForm = new Object();
-
+	var actualForm = {};
 	Form.find( {'form_category.0.value' : req.params.category}, function (err, form) {
-
 		if(err) { return handleError(res, err); }
 		if(!form[0]) { 
 			return res.send(404); 
@@ -102,7 +89,6 @@ exports.showValuesAll = function(req, res) {
 		}
 	});
 };
-
 
 // Create a new form in the db
 exports.create = function(req, res) {
@@ -117,6 +103,7 @@ exports.create = function(req, res) {
 		newForm.form_role = formDetails.formValues.form_role.value;
 	}
 	newForm.form_fields = formDetails.formValues.form_fields;
+
 	// console.log(formDetails.formValues.form_fields);
 	newForm.save(function(err, form) {
 		if(err) return validationError(res, err);
@@ -128,101 +115,42 @@ exports.submitForm = function(req, res) {
 	Form.findById(req.body.formId, function(err, form) {
 		if(err) { return handleError(res, err); }
 		if(!form) { 
-			// console.log('No form found!');
 			return res.send(404); 
 		} else {
 			var len = form.form_responses.length;
 			var old_user = false;
-
-//////////////////////// NEED TO DO THIS UPDATE KA THING ////////////////////////////
-
 			for(var i=0; i<len; i++) {
+				if(form.form_responses[i].userId.equals(req.user._id)) {					 
+					form.form_responses[i].values = req.body.formValues;
+					form.form_responses[i].responseUpdatedOn = Date.now();
 
-				console.log(form.form_responses[i][0].userId);
-				console.log(req.user._id);
-				// if(form.form_responses[i][0].userId === req.user._id) {	// this cmp is not working
-				if(form.form_responses[i][0].userEmail === req.user.email) {	// this is working
-
-					// storing the created date in some temporary variable as it gets over-written
-					var createdDate = form.form_responses[i][0].responseCreatedOn;
-
-					console.log('createdDate : ' + createdDate);
-					console.log('i :' + i);
-												
-					// appending additional data about the user to formValues 
-					req.body.formValues[0].userId = req.user._id;
-					req.body.formValues[0].userName = req.user.name;
-					req.body.formValues[0].userEmail = req.user.email;
-					req.body.formValues[0].responseCreatedOn = Date.now();
-					req.body.formValues[0].responseUpdatedOn = Date.now();
-					
-					form.form_responses[i] = req.body.formValues;
-
-					console.log(req.body.formValues);
-					console.log(form.form_responses[i]);
-
-					// updating the original response created date
-					form.form_responses[i][0].responseCreatedOn = createdDate;
-					
-					// updating the form updated date
 					form.updated_on = Date.now();
 
-					// form.update(
-					// 	{ 	
-					// 		'form_responses.i.0.userId': req.user._id,
-					// 		'form_id': req.body.formId
-					// 	},
-					// 	{
-					// 		$set: {
-					// 			'form_responses.i': req.body.formValues
-					// 		}
-					// 	}, function(err) {
-					// 		console.log('error occurred');
-					// 		console.log(err);
-					// 	}
-					// )
+					form.markModified('updated_on');
+					form.markModified('form_responses');
 
-
-
-					form.form_responses.push([form.form_responses[i], req.body.formValues]);
-						form.markModified('form_responses');
-					form.save(function(err, up) {
-						if(err) {
-							console.log('error occurred');
-							console.log(err);
-						} else {
-							console.log('udated form');
-							console.log(up);
-						}
-					});	
-
-
-
-
-
+					form.save(function(err) {
+						if(err) console.log(err);
+					});
+			
 					old_user = true;
 				}
 			}
 			
 			if(old_user === true) {
-				console.log('Duplicate detected - successfully updated');
 				return res.send('Updated successfully');
 			} else {
-				// console.log(req.user);
-				req.body.formValues[0].userId = req.user._id;
-				req.body.formValues[0].userName = req.user.name;
-				req.body.formValues[0].userEmail = req.user.email;
-				req.body.formValues[0].responseCreatedOn = Date.now();
-				req.body.formValues[0].responseUpdatedOn = Date.now();
-				
-				console.log(req.body.formValues);
+				var fVal = {}
+				fVal['values'] = req.body.formValues;
+				fVal['userId'] = req.user._id;
+				fVal['userName'] = req.user.name;
+				fVal['userEmail'] = req.user.email;
+				fVal['responseCreatedOn'] = Date.now();
+				fVal['responseUpdatedOn'] = Date.now();
 
-				form.form_responses.push(req.body.formValues);
-				form.updated_on = Date.now();
+				form.form_responses.push(fVal);
 
-				// console.log('form_responses : ' + req.body.formValues);
-
-				form.save(function(err, updatedForm) {
+				form.save(function(err) {
 					if(err) return validationError(res, err);
 					else res.send({type: 'success', msg: 'Updated successfully'});
 				});

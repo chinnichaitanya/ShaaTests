@@ -47,14 +47,6 @@ angular.module('shaastraApp')
       $scope.formResponses = '';
     }
       
-    // for date-picker
-    $scope.open = function($event) {
-      $event.preventDefault(); 
-      $event.stopPropagation();
-
-      $scope.opened = true;
-    };
-
     $scope.updateUser = function() {
       if($scope.applying && Auth.getCurrentUser()._id) {
         $http.post('/api/users/update', { id: Auth.getCurrentUser()._id, applying: $scope.applying })

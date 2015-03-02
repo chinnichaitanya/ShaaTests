@@ -1,12 +1,5 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<header class="hero-unit" id="banner">
-  <div class="container">
-  	<h1><u>Welcome</u></h1>
-    <!-- <img src="assets/images/yeoman.png" alt="I'm Yeoman"> -->
-  </div>
-</header>
-
 <div class="container-fluid">
     <div class="row" ng-hide="updated">
         <div class="col-sm-12 text-center">
@@ -36,9 +29,7 @@
    			</alert>
    		</div>
    	</div>
-  
-	<hr>
-
+<!-- to show gen alerts -->
     <tabset>
         <tab heading="Fill Application">
 	    	<br>
@@ -58,44 +49,45 @@
 				</div>
 
 	    		<!-- showing form only if there is a form for the particular department -->
-	    		<div ng-show="formPresent">
-	    			<alert type="info" class="text-center">
-	    				<h4>Fill/Update your Application</h4>
-	    			</alert>
+	    		<div class="col-sm-6">
+	    			<div ng-show="formPresent">
+	    				<alert type="info" class="text-center">
+	    					<h4>Fill (or) Update your Application</h4>
+	    				</alert>
 	    		
-	    			<!-- displaying the form -->
-					<form-directive form="form"></form-directive>
+	    				<!-- displaying the form -->
+						<form-directive form="form"></form-directive>
+					</div>
 				</div>
-	    	</div>
-	    	<hr>
 
-	    	<div class="row text-center">
-	    		<h1><u>Your latest response</u></h1>
-	    	</div>
-	    	<br>
-	    	<!-- <pre>{{formResponses | json}}</pre> -->
-	    	<div ng-hide="formResponses" class="row text-center">
-	    		<alert type="danger">You haven't submitted your response yet</alert>
-	    	</div>
-	    	<div ng-show="formResponses" ng-repeat="each in formResponses">
-	    		<div class="row">
-	    			<div class="col-sm-offset-4 col-sm-2">
-		    			<h4>{{each.field_title}} :</h4>
-	    			</div>
-	    			<div class="col-sm-2" ng-if="each.field_type === 'dropdown'">
-	    				<div ng-repeat="option in each.field_options">
-	    					<input class="form-control" type="text" ng-if="each.field_value == option.option_id" ng-model="option.option_title" disabled>
-	    				</div>
-	    			</div>
-	    			<div class="col-sm-2" ng-if="each.field_type === 'radio'">
-	    				<div ng-repeat="option in each.field_options">
-	    					<input class="form-control" type="text" ng-if="each.field_value == option.option_id" ng-model="option.option_title" disabled>
-	    				</div>
-	    			</div>
-	    			<div class="col-sm-2" ng-if="each.field_type != 'dropdown' && each.field_type != 'radio'">
-	    				<input class="form-control" type="text" ng-model="each.field_value" disabled>
-	    			</div>
-	    		</div>
+		    	<div class="col-sm-6 text-center">
+		    		<h1><u>Your latest response</u></h1>
+			    	<br>
+			    	<!-- <pre>{{formResponses | json}}</pre> -->
+			    	<div ng-hide="formResponses" class="row text-center">
+			    		<alert type="danger">You haven't submitted your response yet</alert>
+			    	</div>
+			    	<div ng-show="formResponses" ng-repeat="each in formResponses.values">
+			    		<div class="row">
+			    			<div class="col-sm-6">
+				    			<h4>{{each.field_title}} :</h4>
+			    			</div>
+			    			<div class="col-sm-6" ng-if="each.field_type === 'dropdown'">
+			    				<div ng-repeat="option in each.field_options">
+			    					<input class="form-control" type="text" ng-if="each.field_value == option.option_id" ng-model="option.option_title" disabled>
+			    				</div>
+			    			</div>
+			    			<div class="col-sm-6" ng-if="each.field_type === 'radio'">
+			    				<div ng-repeat="option in each.field_options">
+			    					<input class="form-control" type="text" ng-if="each.field_value == option.option_id" ng-model="option.option_title" disabled>
+			    				</div>
+			    			</div>
+			    			<div class="col-sm-6" ng-if="each.field_type != 'dropdown' && each.field_type != 'radio'">
+			    				<input class="form-control" type="text" ng-model="each.field_value" disabled>
+			    			</div>
+			    		</div>
+			    	</div>
+		    	</div>
 	    	</div>
     	</tab>
     </tabset>

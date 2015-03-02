@@ -16,7 +16,7 @@ angular.module('shaastraApp')
     // new form
     $scope.form = {};
     $scope.form.form_id = 1;
-    $scope.form.form_name = 'My Form';
+    $scope.form.form_name = 'Shaa Core App';
     $scope.form.form_role = $scope.formRoles[0].name;
     $scope.form.form_category = $scope.options[0].name;
     $scope.form.form_fields = [];

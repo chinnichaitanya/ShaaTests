@@ -46,15 +46,15 @@
 							<br>
 							<div ng-repeat="response in formResponses">
 
-								<accordion close-others="1">
+								<accordion close-others="true">
 									<accordion-group is-open="status.open">
 										<accordion-heading>
-											[{{$index + 1}}] &nbsp; {{response.0.userName}}
+											[{{$index + 1}}] &nbsp; {{response.userName}}
 											<span class="glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></span>
 										</accordion-heading>
-										<h4><u>Username</u> : <span class="text-muted">{{response.0.userName}}</span></h4>
-										<h4><u>EmailID</u> : <span class="text-muted">{{response.0.userEmail}}</span></h4>
-										<div class="container-fluid" ng-repeat="each in response">
+										<h4><u>Username</u> : <span class="text-muted">{{response.userName}}</span></h4>
+										<h4><u>EmailID</u> : <span class="text-muted">{{response.userEmail}}</span></h4>
+										<div class="container-fluid" ng-repeat="each in response.values">
 								    		<div class="row">
 								    			<div class="col-sm-2">
 									    			<h4>{{each.field_title}} :</h4>
