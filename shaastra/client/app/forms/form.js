@@ -6,11 +6,23 @@ angular.module('shaastraApp')
       .state('formsCreate', {
         url: '/forms/create',
         templateUrl: 'app/forms/create/create.html',
-        controller: 'CreateCtrl'
+        controller: 'CreateCtrl',
+        data: {
+          permissions: {
+            only: ['admin'],
+            redirectTo: 'dashboard'
+          }
+        }        
       })
       .state('formsView', {
         url: '/forms/view/:id',
         templateUrl: 'app/forms/view/view.html',
-        controller: 'ViewCtrl'
+        controller: 'ViewCtrl',
+        data: {
+          permissions: {
+            except: ['anonymous'],
+            redirectTo: 'login'
+          }
+        }        
       });
   });

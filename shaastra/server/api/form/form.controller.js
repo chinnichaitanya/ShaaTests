@@ -117,43 +117,59 @@ exports.submitForm = function(req, res) {
 		if(!form) { 
 			return res.send(404); 
 		} else {
-			// var validated = false;
+			var validated = false;
 
-			// validated = validateForm(form, req.body.formValues);
+			validated = validateForm(res, form, req.body.formValues);
 			// console.log(validated);
 
-			// if(validated) {
-			if(true) {
+			if(validated) {
 				var len = form.form_responses.length;
 				var old_user = false;
+				var userFound = -1;
+				var len2 = req.body.formValues.length;
+				var values = req.body.formValues;
+
+				/**
+				 * sanitizing the form data 
+				 */
+				for(var i=0; i<len2; i++) {
+					values[i].field_value = values[i].field_value.replace('/', '');
+					values[i].field_value = values[i].field_value.replace('<', '');
+					values[i].field_value = values[i].field_value.replace('>', '');
+					values[i].field_value = values[i].field_value.replace('*', '');
+				}
+
 				for(var i=0; i<len; i++) {
 					if(form.form_responses[i].userId.equals(req.user._id)) {					 
-						form.form_responses[i].values = req.body.formValues;
-						form.form_responses[i].responseUpdatedOn = Date.now();
-
-						form.updated_on = Date.now();
-
-						form.markModified('updated_on');
-						form.markModified('form_responses');
-
-						form.save(function(err) {
-							if(err) console.log(err);
-						});
-				
-						old_user = true;
+						userFound = i;
 					}
 				}
+
+				if(userFound >= 0) {
+					form.form_responses[userFound].values = values;
+					form.form_responses[userFound].responseUpdatedOn = Date.now();
+
+					form.updated_on = Date.now();
+
+					form.markModified('updated_on');
+					form.markModified('form_responses');
+
+					form.save(function(err) {
+						if(err) return validationError(res, err);
+						else res.send({type: 'success', msg: 'Updated successfully'});
+					});
 				
-				if(old_user === true) {
-					return res.send('Updated successfully');
-				} else {
+					old_user = true;
+				}
+				
+				if(old_user !== true) {
 					var fVal = {}
-					fVal['values'] = req.body.formValues;
-					fVal['userId'] = req.user._id;
-					fVal['userName'] = req.user.name;
-					fVal['userEmail'] = req.user.email;
-					fVal['responseCreatedOn'] = Date.now();
-					fVal['responseUpdatedOn'] = Date.now();
+					fVal.values = values;
+					fVal.userId = req.user._id;
+					fVal.userName = req.user.name;
+					fVal.userEmail = req.user.email;
+					fVal.responseCreatedOn = Date.now();
+					fVal.responseUpdatedOn = Date.now();
 
 					form.form_responses.push(fVal);
 
@@ -182,33 +198,31 @@ function handleError(res, err) {
 	return res.send(500, err);
 }
 
-/**
-function validateForm(form, formValues) {
+
+function validateForm(res, form, formValues) {
 	var len1 = form.form_fields.length;
 	var len2 = formValues.length;
 	var validated = false;
 	var j = 0;
 	var i = 1;
-	if(len1 != len2) {
+	if(len1 !== len2) {
 		res.send({type: 'danger', msg: 'Bloody Hell'});
 	} else {
 		while(j<len1) {
 			if(form.form_fields[j].field_required) {
-				if(formValues[j].field_required) {
+				if(formValues[j].field_value)
 					i *= 1;
-				} else {
+				else
 					i *= 0;
-				}
 			}
+			j++
 		}
 
-		if(i === 1) {
+		if(i === 1)
 			validated = true;
-		} else {
+		else
 			validated = false;
-		}
 	}
-	console.log(i);
+	// console.log(i);
 	return validated;
 }
-*/

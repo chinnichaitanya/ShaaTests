@@ -44,7 +44,7 @@ angular.module('shaastraApp', [
     };
   })
 
-  .run(function ($rootScope, $location, Auth) {
+  .run(function ($rootScope, $location, Auth, Permission) {
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
       Auth.isLoggedInAsync(function(loggedIn) {
@@ -53,4 +53,36 @@ angular.module('shaastraApp', [
         }
       });
     });
+
+    /**
+     * Defining all the roles
+     */
+    Permission
+      .defineRole('anonymous', function(stateParams) {
+        if(Auth.isLoggedIn()) {
+          var currUser = Auth.getCurrentUser();
+          if(currUser) {
+            return false;
+          }
+        }
+        return true;
+      })
+      .defineRole('user', function(stateParams) {
+        if(Auth.isLoggedIn()) {
+          var currUser = Auth.getCurrentUser();
+          if(currUser.role === 'user') {
+            return true;
+          }
+        }
+        return false;        
+      })
+      .defineRole('admin', function(stateParams) {
+        if(Auth.isLoggedIn()) {
+          var currUser = Auth.getCurrentUser();
+          if(currUser.role === 'admin') {
+            return true;
+          }
+        }
+        return false;        
+      });
   });
