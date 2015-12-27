@@ -1,2 +1,2 @@
 ## Shaastra Core Portal
-Core portal for Shaastra
+MEAN Stack portal for core selection for Shaastra
